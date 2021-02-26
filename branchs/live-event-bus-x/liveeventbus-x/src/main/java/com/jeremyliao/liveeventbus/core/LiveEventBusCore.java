@@ -22,7 +22,7 @@ import com.jeremyliao.liveeventbus.ipc.receiver.LebIpcReceiver;
 import com.jeremyliao.liveeventbus.logger.DefaultLogger;
 import com.jeremyliao.liveeventbus.logger.Logger;
 import com.jeremyliao.liveeventbus.logger.LoggerManager;
-import com.jeremyliao.liveeventbus.utils.AppUtils;
+import com.jeremyliao.liveeventbus.utils.DeprecatedAppUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -118,7 +118,7 @@ public final class LiveEventBusCore {
         if (isRegisterReceiver) {
             return;
         }
-        Application application = AppUtils.getApp();
+        Application application = DeprecatedAppUtils.getApp();
         if (application != null) {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(IpcConst.ACTION);
@@ -238,7 +238,7 @@ public final class LiveEventBusCore {
          */
         @Override
         public void broadcast(final T value, final boolean foreground, final boolean onlyInApp) {
-            if (AppUtils.getApp() != null) {
+            if (DeprecatedAppUtils.getApp() != null) {
                 if (isMainThread()) {
                     broadcastInternal(value, foreground, onlyInApp);
                 } else {
@@ -363,7 +363,7 @@ public final class LiveEventBusCore {
         private void broadcastInternal(T value, boolean foreground, boolean onlyInApp) {
             logger.log(Level.INFO, "broadcast: " + value + " foreground: " + foreground +
                     " with key: " + key);
-            Application application = AppUtils.getApp();
+            Application application = DeprecatedAppUtils.getApp();
             if (application == null) {
                 logger.log(Level.WARNING, "application is null, you can try setContext() when config");
                 return;
@@ -554,7 +554,7 @@ public final class LiveEventBusCore {
                     .append("logger enable: ").append(logger.isEnable()).append("\n")
                     .append("logger: ").append(logger.getLogger()).append("\n")
                     .append("Receiver register: ").append(isRegisterReceiver).append("\n")
-                    .append("Application: ").append(AppUtils.getApp()).append("\n");
+                    .append("Application: ").append(DeprecatedAppUtils.getApp()).append("\n");
             return sb.toString();
         }
 

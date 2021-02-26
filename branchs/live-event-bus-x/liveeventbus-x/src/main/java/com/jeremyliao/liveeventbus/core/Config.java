@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.jeremyliao.liveeventbus.logger.Logger;
-import com.jeremyliao.liveeventbus.utils.AppUtils;
+import com.jeremyliao.liveeventbus.utils.DeprecatedAppUtils;
 
 /**
  * Created by liaohailiang on 2019-08-28.
@@ -44,7 +44,7 @@ public class Config {
      * @return
      */
     public Config setContext(Context context) {
-        AppUtils.init(context);
+        DeprecatedAppUtils.init(context);
         LiveEventBusCore.get().registerReceiver();
         return this;
     }

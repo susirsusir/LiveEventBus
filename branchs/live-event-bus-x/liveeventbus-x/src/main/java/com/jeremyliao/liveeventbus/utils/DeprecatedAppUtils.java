@@ -26,7 +26,7 @@ import java.util.Set;
  * from Github: https://github.com/Blankj/AndroidUtilCode
  * thanks Blankj
  */
-public final class AppUtils {
+public final class DeprecatedAppUtils {
 
     private static final String PERMISSION_ACTIVITY_CLASS_NAME =
             "com.blankj.utilcode.util.PermissionUtils$PermissionActivity";
@@ -36,7 +36,7 @@ public final class AppUtils {
     @SuppressLint("StaticFieldLeak")
     private static Application sApplication;
 
-    private AppUtils() {
+    private DeprecatedAppUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
@@ -123,20 +123,20 @@ public final class AppUtils {
     static Context getTopActivityOrApp() {
         if (isAppForeground()) {
             Activity topActivity = ACTIVITY_LIFECYCLE.getTopActivity();
-            return topActivity == null ? AppUtils.getApp() : topActivity;
+            return topActivity == null ? DeprecatedAppUtils.getApp() : topActivity;
         } else {
-            return AppUtils.getApp();
+            return DeprecatedAppUtils.getApp();
         }
     }
 
     static boolean isAppForeground() {
-        ActivityManager am = (ActivityManager) AppUtils.getApp().getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager am = (ActivityManager) DeprecatedAppUtils.getApp().getSystemService(Context.ACTIVITY_SERVICE);
         if (am == null) return false;
         List<ActivityManager.RunningAppProcessInfo> info = am.getRunningAppProcesses();
         if (info == null || info.size() == 0) return false;
         for (ActivityManager.RunningAppProcessInfo aInfo : info) {
             if (aInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                return aInfo.processName.equals(AppUtils.getApp().getPackageName());
+                return aInfo.processName.equals(DeprecatedAppUtils.getApp().getPackageName());
             }
         }
         return false;
@@ -323,7 +323,7 @@ public final class AppUtils {
         private static void fixSoftInputLeaks(final Activity activity) {
             if (activity == null) return;
             InputMethodManager imm =
-                    (InputMethodManager) AppUtils.getApp().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    (InputMethodManager) DeprecatedAppUtils.getApp().getSystemService(Context.INPUT_METHOD_SERVICE);
             if (imm == null) return;
             String[] leakViews = new String[]{"mLastSrvView", "mCurRootView", "mServedView", "mNextServedView"};
             for (String leakView : leakViews) {
@@ -348,7 +348,7 @@ public final class AppUtils {
 
         @Override
         public boolean onCreate() {
-            AppUtils.init(getContext());
+            DeprecatedAppUtils.init(getContext());
             return true;
         }
     }
