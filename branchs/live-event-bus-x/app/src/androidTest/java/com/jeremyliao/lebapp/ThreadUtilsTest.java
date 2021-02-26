@@ -5,7 +5,6 @@ import android.os.Looper;
 
 import androidx.test.runner.AndroidJUnit4;
 
-import com.jeremyliao.liveeventbus.utils.ThreadUtils;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,7 +19,7 @@ public class ThreadUtilsTest {
 
     @Test
     public void testInBackgroundThread() throws Exception {
-        Assert.assertFalse(ThreadUtils.isMainThread());
+        Assert.assertFalse(isMainThread());
     }
 
     @Test
@@ -29,9 +28,13 @@ public class ThreadUtilsTest {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                Assert.assertTrue(ThreadUtils.isMainThread());
+                Assert.assertTrue(isMainThread());
             }
         });
         Thread.sleep(500);
+    }
+
+    private boolean isMainThread() {
+        return Looper.myLooper() == Looper.getMainLooper();
     }
 }

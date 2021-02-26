@@ -23,7 +23,6 @@ import com.jeremyliao.liveeventbus.logger.DefaultLogger;
 import com.jeremyliao.liveeventbus.logger.Logger;
 import com.jeremyliao.liveeventbus.logger.LoggerManager;
 import com.jeremyliao.liveeventbus.utils.AppUtils;
-import com.jeremyliao.liveeventbus.utils.ThreadUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -156,7 +155,7 @@ public final class LiveEventBusCore {
          */
         @Override
         public void post(T value) {
-            if (ThreadUtils.isMainThread()) {
+            if (isMainThread()) {
                 postInternal(value);
             } else {
                 mainHandler.post(new PostValueTask(value));
@@ -240,7 +239,7 @@ public final class LiveEventBusCore {
         @Override
         public void broadcast(final T value, final boolean foreground, final boolean onlyInApp) {
             if (AppUtils.getApp() != null) {
-                if (ThreadUtils.isMainThread()) {
+                if (isMainThread()) {
                     broadcastInternal(value, foreground, onlyInApp);
                 } else {
                     mainHandler.post(new Runnable() {
@@ -263,7 +262,7 @@ public final class LiveEventBusCore {
          */
         @Override
         public void observe(@NonNull final LifecycleOwner owner, @NonNull final Observer<T> observer) {
-            if (ThreadUtils.isMainThread()) {
+            if (isMainThread()) {
                 observeInternal(owner, observer);
             } else {
                 mainHandler.post(new Runnable() {
@@ -284,7 +283,7 @@ public final class LiveEventBusCore {
          */
         @Override
         public void observeSticky(@NonNull final LifecycleOwner owner, @NonNull final Observer<T> observer) {
-            if (ThreadUtils.isMainThread()) {
+            if (isMainThread()) {
                 observeStickyInternal(owner, observer);
             } else {
                 mainHandler.post(new Runnable() {
@@ -303,7 +302,7 @@ public final class LiveEventBusCore {
          */
         @Override
         public void observeForever(@NonNull final Observer<T> observer) {
-            if (ThreadUtils.isMainThread()) {
+            if (isMainThread()) {
                 observeForeverInternal(observer);
             } else {
                 mainHandler.post(new Runnable() {
@@ -323,7 +322,7 @@ public final class LiveEventBusCore {
          */
         @Override
         public void observeStickyForever(@NonNull final Observer<T> observer) {
-            if (ThreadUtils.isMainThread()) {
+            if (isMainThread()) {
                 observeStickyForeverInternal(observer);
             } else {
                 mainHandler.post(new Runnable() {
@@ -342,7 +341,7 @@ public final class LiveEventBusCore {
          */
         @Override
         public void removeObserver(@NonNull final Observer<T> observer) {
-            if (ThreadUtils.isMainThread()) {
+            if (isMainThread()) {
                 removeObserverInternal(observer);
             } else {
                 mainHandler.post(new Runnable() {
@@ -609,5 +608,9 @@ public final class LiveEventBusCore {
                 return "";
             }
         }
+    }
+
+    private boolean isMainThread() {
+        return Looper.myLooper() == Looper.getMainLooper();
     }
 }
