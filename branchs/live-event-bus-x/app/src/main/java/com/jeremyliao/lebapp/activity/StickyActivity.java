@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer;
 import com.jeremyliao.lebapp.LiveEventBusDemo;
 import com.jeremyliao.lebapp.R;
 import com.jeremyliao.lebapp.databinding.ActivityStickyDemoBinding;
-import com.jeremyliao.liveeventbus.LiveEventBus;
+import com.jeremyliao.liveeventbus.XLiveDataEventBus;
 
 
 public class StickyActivity extends AppCompatActivity {
@@ -28,7 +28,7 @@ public class StickyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sticky_demo);
         binding.setLifecycleOwner(this);
-        LiveEventBus
+        XLiveDataEventBus
                 .get(LiveEventBusDemo.KEY_TEST_STICKY, String.class)
                 .observeSticky(this, new Observer<String>() {
                     @Override
@@ -36,7 +36,7 @@ public class StickyActivity extends AppCompatActivity {
                         binding.tvSticky1.setText("observeSticky注册的观察者收到消息: " + s);
                     }
                 });
-        LiveEventBus
+        XLiveDataEventBus
                 .get(LiveEventBusDemo.KEY_TEST_STICKY, String.class)
                 .observeStickyForever(observer);
     }
@@ -44,7 +44,7 @@ public class StickyActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LiveEventBus
+        XLiveDataEventBus
                 .get(LiveEventBusDemo.KEY_TEST_STICKY, String.class)
                 .removeObserver(observer);
     }

@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil;
 import com.jeremyliao.lebapp.LiveEventBusDemo;
 import com.jeremyliao.lebapp.R;
 import com.jeremyliao.lebapp.databinding.ActivityObserverActiveLevelDemoBinding;
-import com.jeremyliao.liveeventbus.LiveEventBus;
+import com.jeremyliao.liveeventbus.XLiveDataEventBus;
 
 
 public class ObserverActiveLevelActivity extends AppCompatActivity {
@@ -29,7 +29,7 @@ public class ObserverActiveLevelActivity extends AppCompatActivity {
     }
 
     public void sendMsgToPrevent() {
-        LiveEventBus
+        XLiveDataEventBus
                 .get(LiveEventBusDemo.KEY_TEST_ACTIVE_LEVEL)
                 .post("Send Msg To Observer Stopped");
     }

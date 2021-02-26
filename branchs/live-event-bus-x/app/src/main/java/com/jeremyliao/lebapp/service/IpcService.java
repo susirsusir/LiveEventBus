@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 
 import com.jeremyliao.lebapp.LiveEventBusDemo;
-import com.jeremyliao.liveeventbus.LiveEventBus;
+import com.jeremyliao.liveeventbus.XLiveDataEventBus;
 
 /**
  * Created by liaohailiang on 2019/3/26.
@@ -19,7 +19,7 @@ public class IpcService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        LiveEventBus
+        XLiveDataEventBus
                 .get(LiveEventBusDemo.KEY_TEST_BROADCAST, String.class)
                 .observeForever(observer);
     }
@@ -27,7 +27,7 @@ public class IpcService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LiveEventBus
+        XLiveDataEventBus
                 .get(LiveEventBusDemo.KEY_TEST_BROADCAST, String.class)
                 .removeObserver(observer);
     }

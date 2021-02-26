@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.jeremyliao.liveeventbus.LiveEventBus;
+import com.jeremyliao.liveeventbus.XLiveDataEventBus;
 import com.jeremyliao.liveeventbus.ipc.consts.IpcConst;
 import com.jeremyliao.liveeventbus.ipc.core.ProcessorManager;
 
@@ -20,7 +20,7 @@ public class LebIpcReceiver extends BroadcastReceiver {
                 String key = intent.getStringExtra(IpcConst.KEY);
                 Object value = ProcessorManager.getManager().createFrom(intent);
                 if (key != null && value != null) {
-                    LiveEventBus.get(key).post(value);
+                    XLiveDataEventBus.get(key).post(value);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -3,7 +3,7 @@ package com.jeremyliao.liveeventbus;
 import androidx.annotation.NonNull;
 
 import com.jeremyliao.liveeventbus.core.Config;
-import com.jeremyliao.liveeventbus.core.LiveEvent;
+import com.jeremyliao.liveeventbus.core.EventType;
 import com.jeremyliao.liveeventbus.core.LiveEventBusCore;
 import com.jeremyliao.liveeventbus.core.Observable;
 import com.jeremyliao.liveeventbus.core.ObservableConfig;
@@ -21,7 +21,7 @@ import com.jeremyliao.liveeventbus.core.ObservableConfig;
  * Created by liaohailiang on 2019/1/21.
  */
 
-public final class LiveEventBus {
+public final class XLiveDataEventBus {
 
     /**
      * get observable by key with type
@@ -52,7 +52,7 @@ public final class LiveEventBus {
      * @param <T>
      * @return Observable<T>
      */
-    public static <T extends LiveEvent> Observable<T> get(@NonNull Class<T> eventType) {
+    public static <T extends EventType> Observable<T> get(@NonNull Class<T> eventType) {
         return get(eventType.getName(), eventType);
     }
 

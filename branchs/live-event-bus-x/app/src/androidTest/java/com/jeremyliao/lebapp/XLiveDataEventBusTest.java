@@ -14,7 +14,7 @@ import com.jeremyliao.lebapp.helper.LiveEventBusTestHelper;
 import com.jeremyliao.lebapp.obj.GoodBean;
 import com.jeremyliao.lebapp.obj.SerializableObject;
 import com.jeremyliao.lebapp.wrapper.Wrapper;
-import com.jeremyliao.liveeventbus.LiveEventBus;
+import com.jeremyliao.liveeventbus.XLiveDataEventBus;
 import com.jeremyliao.liveeventbus.core.Observable;
 
 import org.junit.After;
@@ -36,7 +36,7 @@ import java.util.concurrent.Executors;
  * Created by liaohailiang on 2018/12/6.
  */
 @RunWith(AndroidJUnit4.class)
-public class LiveEventBusTest {
+public class XLiveDataEventBusTest {
 
     @Rule
     public ActivityTestRule<TestActivity> rule = new ActivityTestRule<>(TestActivity.class);
@@ -56,7 +56,7 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(TestActivity.KEY_TEST_OBSERVE, String.class)
                         .post("value_test_set_value");
             }
@@ -67,7 +67,7 @@ public class LiveEventBusTest {
 
     @Test
     public void testPostOnBackThread() throws Exception {
-        LiveEventBus
+        XLiveDataEventBus
                 .get(TestActivity.KEY_TEST_OBSERVE, String.class)
                 .post("value_test_set_value");
         Thread.sleep(500);
@@ -79,7 +79,7 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(TestActivity.KEY_TEST_OBSERVE_FOREVER, String.class)
                         .post("value_test_set_value_forever");
             }
@@ -90,7 +90,7 @@ public class LiveEventBusTest {
 
     @Test
     public void testPostValueToObserverForever() throws Exception {
-        LiveEventBus
+        XLiveDataEventBus
                 .get(TestActivity.KEY_TEST_OBSERVE_FOREVER, String.class)
                 .post("value_test_post_value_forever");
         Thread.sleep(500);
@@ -105,7 +105,7 @@ public class LiveEventBusTest {
             threadPool.execute(new Runnable() {
                 @Override
                 public void run() {
-                    LiveEventBus
+                    XLiveDataEventBus
                             .get(TestActivity.KEY_TEST_MULTI_THREAD_POST)
                             .post("test_data");
                 }
@@ -123,7 +123,7 @@ public class LiveEventBusTest {
 
     @Test
     public void testSendMsgBeforeAndAfterObserveOnCreate() throws Exception {
-        LiveEventBus
+        XLiveDataEventBus
                 .get(TestActivity.KEY_TEST_MSG_SET_BEFORE_ON_CREATE, String.class)
                 .post("msg_set_after");
         Thread.sleep(500);
@@ -138,8 +138,8 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus.get(randomKey, String.class).post("msg_set_before");
-                LiveEventBus
+                XLiveDataEventBus.get(randomKey, String.class).post("msg_set_before");
+                XLiveDataEventBus
                         .get(randomKey, String.class)
                         .observe(rule.getActivity(), new Observer<String>() {
                             @Override
@@ -160,8 +160,8 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus.get(randomKey, String.class).post("msg_set_before");
-                LiveEventBus
+                XLiveDataEventBus.get(randomKey, String.class).post("msg_set_before");
+                XLiveDataEventBus
                         .get(randomKey, String.class)
                         .observe(rule.getActivity(), new Observer<String>() {
                             @Override
@@ -169,7 +169,7 @@ public class LiveEventBusTest {
                                 rule.getActivity().strResult = s;
                             }
                         });
-                LiveEventBus.get(randomKey, String.class).post("msg_set_after");
+                XLiveDataEventBus.get(randomKey, String.class).post("msg_set_after");
             }
         });
         Thread.sleep(500);
@@ -179,9 +179,9 @@ public class LiveEventBusTest {
     @Test
     public void testObserveSticky() throws Exception {
         final String randomKey = "key_random_" + new Random().nextInt();
-        LiveEventBus.get(randomKey, String.class).post("msg_set_before");
+        XLiveDataEventBus.get(randomKey, String.class).post("msg_set_before");
         Thread.sleep(500);
-        LiveEventBus
+        XLiveDataEventBus
                 .get(randomKey, String.class)
                 .observeSticky(rule.getActivity(), new Observer<String>() {
                     @Override
@@ -195,7 +195,7 @@ public class LiveEventBusTest {
 
     @Test
     public void testPostValueDelay1000() throws Exception {
-        LiveEventBus
+        XLiveDataEventBus
                 .get(TestActivity.KEY_TEST_OBSERVE, String.class)
                 .postDelay("value_test_set_value", 1000);
         Thread.sleep(500);
@@ -217,8 +217,8 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus.get(randomKey, String.class).post("msg_set_before");
-                LiveEventBus
+                XLiveDataEventBus.get(randomKey, String.class).post("msg_set_before");
+                XLiveDataEventBus
                         .get(randomKey, String.class)
                         .observeForever(observer);
             }
@@ -228,7 +228,7 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(randomKey, String.class)
                         .removeObserver(observer);
             }
@@ -248,11 +248,11 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus.get(randomKey, String.class).post("msg_set_before");
-                LiveEventBus
+                XLiveDataEventBus.get(randomKey, String.class).post("msg_set_before");
+                XLiveDataEventBus
                         .get(randomKey, String.class)
                         .observeForever(observer);
-                LiveEventBus.get(randomKey, String.class).post("msg_set_after");
+                XLiveDataEventBus.get(randomKey, String.class).post("msg_set_after");
             }
         });
         Thread.sleep(500);
@@ -260,7 +260,7 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(randomKey, String.class)
                         .removeObserver(observer);
             }
@@ -280,8 +280,8 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus.get(randomKey, String.class).post("msg_set_before");
-                LiveEventBus
+                XLiveDataEventBus.get(randomKey, String.class).post("msg_set_before");
+                XLiveDataEventBus
                         .get(randomKey, String.class)
                         .observeStickyForever(observer);
             }
@@ -291,7 +291,7 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(randomKey, String.class)
                         .removeObserver(observer);
             }
@@ -305,7 +305,7 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(key, String.class)
                         .observe(rule.getActivity(), new Observer<String>() {
                             @Override
@@ -313,7 +313,7 @@ public class LiveEventBusTest {
                                 rule.getActivity().strResult = s;
                             }
                         });
-                LiveEventBus.get(key, Integer.class).post(10);
+                XLiveDataEventBus.get(key, Integer.class).post(10);
 
             }
         });
@@ -334,17 +334,17 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(key, String.class)
                         .observeForever(observer);
-                LiveEventBus.get(key, Integer.class).post(10);
+                XLiveDataEventBus.get(key, Integer.class).post(10);
             }
         });
         Thread.sleep(500);
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(key, String.class)
                         .removeObserver(observer);
             }
@@ -359,7 +359,7 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(key, String.class)
                         .observe(rule.getActivity(), new Observer<String>() {
                             @Override
@@ -370,7 +370,7 @@ public class LiveEventBusTest {
             }
         });
         Thread.sleep(500);
-        LiveEventBus
+        XLiveDataEventBus
                 .get(key, String.class)
                 .broadcast("value_test_broadcast_value");
         Thread.sleep(500);
@@ -384,7 +384,7 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(key, Integer.class)
                         .observe(rule.getActivity(), new Observer<Integer>() {
                             @Override
@@ -395,7 +395,7 @@ public class LiveEventBusTest {
             }
         });
         Thread.sleep(500);
-        LiveEventBus
+        XLiveDataEventBus
                 .get(key, Integer.class)
                 .broadcast(100);
         Thread.sleep(500);
@@ -409,7 +409,7 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(key, Boolean.class)
                         .observe(rule.getActivity(), new Observer<Boolean>() {
                             @Override
@@ -420,7 +420,7 @@ public class LiveEventBusTest {
             }
         });
         Thread.sleep(500);
-        LiveEventBus
+        XLiveDataEventBus
                 .get(key, Boolean.class)
                 .broadcast(true);
         Thread.sleep(500);
@@ -434,7 +434,7 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(key, Long.class)
                         .observe(rule.getActivity(), new Observer<Long>() {
                             @Override
@@ -445,7 +445,7 @@ public class LiveEventBusTest {
             }
         });
         Thread.sleep(500);
-        LiveEventBus
+        XLiveDataEventBus
                 .get(key, Long.class)
                 .broadcast(Long.valueOf(100));
         Thread.sleep(500);
@@ -459,7 +459,7 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(key, Float.class)
                         .observe(rule.getActivity(), new Observer<Float>() {
                             @Override
@@ -470,7 +470,7 @@ public class LiveEventBusTest {
             }
         });
         Thread.sleep(500);
-        LiveEventBus
+        XLiveDataEventBus
                 .get(key, Float.class)
                 .broadcast(Float.valueOf(100));
         Thread.sleep(500);
@@ -484,7 +484,7 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(key, SerializableObject.class)
                         .observe(rule.getActivity(), new Observer<SerializableObject>() {
                             @Override
@@ -495,7 +495,7 @@ public class LiveEventBusTest {
             }
         });
         Thread.sleep(500);
-        LiveEventBus
+        XLiveDataEventBus
                 .get(key, SerializableObject.class)
                 .broadcast(new SerializableObject(100));
         Thread.sleep(500);
@@ -509,7 +509,7 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(key, Bundle.class)
                         .observe(rule.getActivity(), new Observer<Bundle>() {
                             @Override
@@ -522,7 +522,7 @@ public class LiveEventBusTest {
         Thread.sleep(500);
         Bundle bundle = new Bundle();
         bundle.putInt("key_test_int", 100);
-        LiveEventBus
+        XLiveDataEventBus
                 .get(key, Bundle.class)
                 .broadcast(bundle);
         Thread.sleep(500);
@@ -536,7 +536,7 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(key, GoodBean.class)
                         .observe(rule.getActivity(), new Observer<GoodBean>() {
                             @Override
@@ -548,7 +548,7 @@ public class LiveEventBusTest {
         });
         Thread.sleep(500);
         GoodBean bean = new GoodBean(100, "hello");
-        LiveEventBus
+        XLiveDataEventBus
                 .get(key, GoodBean.class)
                 .broadcast(bean);
         Thread.sleep(500);
@@ -563,7 +563,7 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(key, String.class)
                         .observe(rule.getActivity(), new Observer<String>() {
                             @Override
@@ -574,7 +574,7 @@ public class LiveEventBusTest {
             }
         });
         Thread.sleep(500);
-        LiveEventBus
+        XLiveDataEventBus
                 .get(key, String.class)
                 .broadcast("value_test_broadcast_value", true, false);
         Thread.sleep(500);
@@ -583,7 +583,7 @@ public class LiveEventBusTest {
 
     @Test
     public void testRemoveObserve() throws Exception {
-        Observable<String> observe = LiveEventBus.get("key_test_remove_observe", String.class);
+        Observable<String> observe = XLiveDataEventBus.get("key_test_remove_observe", String.class);
         Map map = (Map) LiveEventBusTestHelper.getLiveEventField("observerMap", observe);
         LiveData liveData = (LiveData) LiveEventBusTestHelper.getLiveEventField("liveData", observe);
         Observer<String> observer = new Observer<String>() {
@@ -605,7 +605,7 @@ public class LiveEventBusTest {
 
     @Test
     public void testAutoRemoveObserve() throws Exception {
-        Observable<String> observe = LiveEventBus.get("key_test_auto_remove_observe", String.class);
+        Observable<String> observe = XLiveDataEventBus.get("key_test_auto_remove_observe", String.class);
         Map map = (Map) LiveEventBusTestHelper.getLiveEventField("observerMap", observe);
         LiveData liveData = (LiveData) LiveEventBusTestHelper.getLiveEventField("liveData", observe);
         observe.observe(rule.getActivity(), new Observer<String>() {
@@ -628,7 +628,7 @@ public class LiveEventBusTest {
     public void testSendSameMsg() throws Exception {
         final String key = "key_test_send_same_msg";
         final Wrapper<Integer> count = new Wrapper<>(0);
-        LiveEventBus
+        XLiveDataEventBus
 
                 .get(key, String.class)
                 .observe(rule.getActivity(), new Observer<String>() {
@@ -638,11 +638,11 @@ public class LiveEventBusTest {
                     }
                 });
         Thread.sleep(500);
-        LiveEventBus
+        XLiveDataEventBus
 
                 .get(key, String.class)
                 .post("hello");
-        LiveEventBus
+        XLiveDataEventBus
 
                 .get(key, String.class)
                 .post("hello");
@@ -655,7 +655,7 @@ public class LiveEventBusTest {
         final String key = "key_test_send_empty_msg";
         final Wrapper<String> result = new Wrapper<>("");
         final Wrapper<Boolean> received = new Wrapper<>(false);
-        LiveEventBus
+        XLiveDataEventBus
 
                 .get(key, String.class)
                 .observe(rule.getActivity(), new Observer<String>() {
@@ -666,7 +666,7 @@ public class LiveEventBusTest {
                     }
                 });
         Thread.sleep(500);
-        LiveEventBus
+        XLiveDataEventBus
 
                 .get(key, String.class)
                 .post(null);
@@ -677,7 +677,7 @@ public class LiveEventBusTest {
 
     @Test
     public void testClearBusOnRemove() throws Exception {
-        LiveEventBus.config().autoClear(true);
+        XLiveDataEventBus.config().autoClear(true);
         final String key = "test_clear_bus_on_remove";
         int count = LiveEventBusTestHelper.getLiveEventBusCount();
         Observer observer = new Observer() {
@@ -685,13 +685,13 @@ public class LiveEventBusTest {
             public void onChanged(@Nullable Object o) {
             }
         };
-        LiveEventBus
+        XLiveDataEventBus
 
                 .get(key)
                 .observeForever(observer);
         Thread.sleep(500);
         Assert.assertEquals(LiveEventBusTestHelper.getLiveEventBusCount(), count + 1);
-        LiveEventBus
+        XLiveDataEventBus
 
                 .get(key)
                 .removeObserver(observer);
@@ -701,10 +701,10 @@ public class LiveEventBusTest {
 
     @Test
     public void testClearBusOnRemoveAuto() throws Exception {
-        LiveEventBus.config().autoClear(true);
+        XLiveDataEventBus.config().autoClear(true);
         final String key = "test_clear_bus_on_remove_auto";
         int count = LiveEventBusTestHelper.getLiveEventBusCount();
-        LiveEventBus
+        XLiveDataEventBus
 
                 .get(key, String.class)
                 .observe(rule.getActivity(), new Observer<String>() {
@@ -722,11 +722,11 @@ public class LiveEventBusTest {
 
     @Test
     public void testClearBusOnRemoveAutoAndAlwaysActiveFalse() throws Exception {
-        LiveEventBus.config().autoClear(true);
-        LiveEventBus.config().lifecycleObserverAlwaysActive(false);
+        XLiveDataEventBus.config().autoClear(true);
+        XLiveDataEventBus.config().lifecycleObserverAlwaysActive(false);
         final String key = "test_clear_bus_on_remove_auto_aaf";
         int count = LiveEventBusTestHelper.getLiveEventBusCount();
-        LiveEventBus
+        XLiveDataEventBus
 
                 .get(key, String.class)
                 .observe(rule.getActivity(), new Observer<String>() {
@@ -746,7 +746,7 @@ public class LiveEventBusTest {
     public void testSendSameMessageTimes() throws Exception {
         final String key = "test_send_same_message_times";
         final Wrapper<Integer> counter = new Wrapper<>(0);
-        LiveEventBus
+        XLiveDataEventBus
 
                 .get(key, Boolean.class)
                 .observe(rule.getActivity(), new Observer<Boolean>() {
@@ -756,7 +756,7 @@ public class LiveEventBusTest {
                     }
                 });
         for (int i = 0; i < 10; i++) {
-            LiveEventBus
+            XLiveDataEventBus
 
                     .get(key, Boolean.class)
                     .post(true);
@@ -769,7 +769,7 @@ public class LiveEventBusTest {
     public void testContinuePost() throws Exception {
         final String key = "test_continue_post";
         final Wrapper<Integer> counter = new Wrapper<>(0);
-        LiveEventBus
+        XLiveDataEventBus
 
                 .get(key, String.class)
                 .observe(rule.getActivity(), new Observer<String>() {
@@ -778,15 +778,15 @@ public class LiveEventBusTest {
                         counter.setTarget(counter.getTarget() + 1);
                     }
                 });
-        LiveEventBus
+        XLiveDataEventBus
 
                 .get(key, String.class)
                 .post(null);
-        LiveEventBus
+        XLiveDataEventBus
 
                 .get(key, String.class)
                 .post("初始化中");
-        LiveEventBus
+        XLiveDataEventBus
 
                 .get(key, String.class)
                 .post("上一条提示信息");
@@ -799,12 +799,12 @@ public class LiveEventBusTest {
         final String key = "test_post_null";
         final Wrapper<Integer> counter = new Wrapper<>(0);
         final Wrapper<String> result = new Wrapper<>("aaa");
-        LiveEventBus
+        XLiveDataEventBus
 
                 .get(key, String.class)
                 .post(null);
         Thread.sleep(500);
-        LiveEventBus
+        XLiveDataEventBus
 
                 .get(key, String.class)
                 .observeSticky(rule.getActivity(), new Observer<String>() {
@@ -823,7 +823,7 @@ public class LiveEventBusTest {
     public void testPostOrderly() throws Exception {
         final String key = "test_post_orderly";
         final List<Integer> result = new ArrayList<>();
-        LiveEventBus
+        XLiveDataEventBus
 
                 .get(key, Integer.class)
                 .observe(rule.getActivity(), new Observer<Integer>() {
@@ -833,7 +833,7 @@ public class LiveEventBusTest {
                     }
                 });
         for (int i = 0; i < 10; i++) {
-            LiveEventBus
+            XLiveDataEventBus
 
                     .get(key, Integer.class)
                     .postOrderly(i);
@@ -851,7 +851,7 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(key, Integer.class)
                         .observe(rule.getActivity(), new Observer<Integer>() {
                             @Override
@@ -862,7 +862,7 @@ public class LiveEventBusTest {
                         });
                 for (int i = 0; i < 10; i++) {
                     try {
-                        LiveEventBus
+                        XLiveDataEventBus
                                 .get(key, Integer.class)
                                 .post(i);
                     } catch (Exception e) {
@@ -881,7 +881,7 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(key, String.class)
                         .observe(rule.getActivity(), new Observer<String>() {
                             @Override
@@ -892,7 +892,7 @@ public class LiveEventBusTest {
             }
         });
         Thread.sleep(500);
-        LiveEventBus
+        XLiveDataEventBus
                 .get(key, String.class)
                 .postAcrossProcess("value_test_broadcast_value");
         Thread.sleep(500);
@@ -906,7 +906,7 @@ public class LiveEventBusTest {
         rule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LiveEventBus
+                XLiveDataEventBus
                         .get(key, String.class)
                         .observe(rule.getActivity(), new Observer<String>() {
                             @Override
@@ -917,7 +917,7 @@ public class LiveEventBusTest {
             }
         });
         Thread.sleep(500);
-        LiveEventBus
+        XLiveDataEventBus
                 .get(key, String.class)
                 .postAcrossApp("value_test_broadcast_value");
         Thread.sleep(500);

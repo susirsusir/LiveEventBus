@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 
-import com.jeremyliao.liveeventbus.LiveEventBus;
+import com.jeremyliao.liveeventbus.XLiveDataEventBus;
 
 public class IpcTestActivity extends AppCompatActivity {
 
@@ -20,7 +20,7 @@ public class IpcTestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LiveEventBus
+        XLiveDataEventBus
                 .get(KEY_TEST_IPC_OBSERVE, Object.class)
                 .observe(this, new Observer<Object>() {
                     @Override

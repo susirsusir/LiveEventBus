@@ -13,9 +13,9 @@ import androidx.lifecycle.Observer;
 import com.jeremyliao.lebapp.activity.ObserverActiveLevelActivity;
 import com.jeremyliao.lebapp.activity.StickyActivity;
 import com.jeremyliao.lebapp.databinding.ActivityLiveDataBusDemoBinding;
-import com.jeremyliao.lebapp.event.DemoEvent;
+import com.jeremyliao.lebapp.event.DemoEventType;
 import com.jeremyliao.lebapp.service.IpcService;
-import com.jeremyliao.liveeventbus.LiveEventBus;
+import com.jeremyliao.liveeventbus.XLiveDataEventBus;
 
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -52,7 +52,7 @@ public class LiveEventBusDemo extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_live_data_bus_demo);
         binding.setHandler(this);
         binding.setLifecycleOwner(this);
-        LiveEventBus
+        XLiveDataEventBus
                 .get(KEY_TEST_OBSERVE, String.class)
                 .observe(this, new Observer<String>() {
                     @Override
@@ -60,10 +60,10 @@ public class LiveEventBusDemo extends AppCompatActivity {
                         Toast.makeText(LiveEventBusDemo.this, s, Toast.LENGTH_SHORT).show();
                     }
                 });
-        LiveEventBus
+        XLiveDataEventBus
                 .get(KEY_TEST_OBSERVE_FOREVER, String.class)
                 .observeForever(observer);
-        LiveEventBus
+        XLiveDataEventBus
                 .get(KEY_TEST_CLOSE_ALL_PAGE, Boolean.class)
                 .observe(this, new Observer<Boolean>() {
                     @Override
@@ -73,7 +73,7 @@ public class LiveEventBusDemo extends AppCompatActivity {
                         }
                     }
                 });
-        LiveEventBus
+        XLiveDataEventBus
                 .get(KEY_TEST_MULTI_THREAD_POST, String.class)
                 .observe(this, new Observer<String>() {
                     @Override
@@ -81,7 +81,7 @@ public class LiveEventBusDemo extends AppCompatActivity {
                         receiveCount++;
                     }
                 });
-        LiveEventBus
+        XLiveDataEventBus
                 .get(KEY_TEST_ACTIVE_LEVEL, String.class)
                 .observe(this, new Observer<String>() {
                     @Override
@@ -90,10 +90,10 @@ public class LiveEventBusDemo extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-        LiveEventBus.get(DemoEvent.class)
-                .observe(this, new Observer<DemoEvent>() {
+        XLiveDataEventBus.get(DemoEventType.class)
+                .observe(this, new Observer<DemoEventType>() {
                     @Override
-                    public void onChanged(@Nullable DemoEvent demoEvent) {
+                    public void onChanged(@Nullable DemoEventType demoEvent) {
                         Toast.makeText(LiveEventBusDemo.this, "Receive message: " +
                                 demoEvent.content, Toast.LENGTH_SHORT).show();
                     }
@@ -103,9 +103,9 @@ public class LiveEventBusDemo extends AppCompatActivity {
 
     private void testMessageSetBeforeOnCreate() {
         //先发出一个消息
-        LiveEventBus.get(KEY_TEST_MSG_SET_BEFORE_ON_CREATE, String.class).post("msg set before");
+        XLiveDataEventBus.get(KEY_TEST_MSG_SET_BEFORE_ON_CREATE, String.class).post("msg set before");
         //然后订阅这个消息
-        LiveEventBus
+        XLiveDataEventBus
                 .get(KEY_TEST_MSG_SET_BEFORE_ON_CREATE, String.class)
                 .observe(this, new Observer<String>() {
                     @Override
@@ -118,23 +118,23 @@ public class LiveEventBusDemo extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LiveEventBus
+        XLiveDataEventBus
                 .get(KEY_TEST_OBSERVE_FOREVER, String.class)
                 .removeObserver(observer);
     }
 
     public void sendMsgByPostValue() {
-        LiveEventBus.get(KEY_TEST_OBSERVE)
+        XLiveDataEventBus.get(KEY_TEST_OBSERVE)
                 .post("Message By PostValue: " + new Random().nextInt(100));
     }
 
     public void sendMsgToForeverObserver() {
-        LiveEventBus.get(KEY_TEST_OBSERVE_FOREVER)
+        XLiveDataEventBus.get(KEY_TEST_OBSERVE_FOREVER)
                 .post("Message To ForeverObserver: " + new Random().nextInt(100));
     }
 
     public void sendMsgToStickyReceiver() {
-        LiveEventBus.get(KEY_TEST_STICKY)
+        XLiveDataEventBus.get(KEY_TEST_STICKY)
                 .post("Message Sticky: " + new Random().nextInt(100));
     }
 
@@ -147,7 +147,7 @@ public class LiveEventBusDemo extends AppCompatActivity {
     }
 
     public void closeAll() {
-        LiveEventBus.get(KEY_TEST_CLOSE_ALL_PAGE).post(true);
+        XLiveDataEventBus.get(KEY_TEST_CLOSE_ALL_PAGE).post(true);
     }
 
     public void postValueCountTest() {
@@ -158,7 +158,7 @@ public class LiveEventBusDemo extends AppCompatActivity {
             threadPool.execute(new Runnable() {
                 @Override
                 public void run() {
-                    LiveEventBus.get(KEY_TEST_MULTI_THREAD_POST).post("test_data");
+                    XLiveDataEventBus.get(KEY_TEST_MULTI_THREAD_POST).post("test_data");
                 }
             });
         }
@@ -175,9 +175,9 @@ public class LiveEventBusDemo extends AppCompatActivity {
         //先动态生成一个key
         randomKey = "key_random_" + new Random().nextInt();
         //然后发出一个消息
-        LiveEventBus.get(randomKey, String.class).post("msg set before");
+        XLiveDataEventBus.get(randomKey, String.class).post("msg set before");
         //然后订阅这个消息
-        LiveEventBus
+        XLiveDataEventBus
                 .get(randomKey, String.class)
                 .observe(this, new Observer<String>() {
                     @Override
@@ -188,7 +188,7 @@ public class LiveEventBusDemo extends AppCompatActivity {
     }
 
     public void sendMessageSetBefore() {
-        LiveEventBus.get(randomKey, String.class).post("msg set after");
+        XLiveDataEventBus.get(randomKey, String.class).post("msg set after");
     }
 
     public void testObserverActiveLevel() {
@@ -196,14 +196,14 @@ public class LiveEventBusDemo extends AppCompatActivity {
     }
 
     public void testBroadcast() {
-        LiveEventBus
+        XLiveDataEventBus
                 .get(KEY_TEST_BROADCAST)
                 .broadcast("broadcast msg");
     }
 
     public void sendDemoEvent() {
-        LiveEventBus
-                .get(DemoEvent.class)
-                .post(new DemoEvent("Hello world"));
+        XLiveDataEventBus
+                .get(DemoEventType.class)
+                .post(new DemoEventType("Hello world"));
     }
 }

@@ -10,7 +10,7 @@ import com.jeremyliao.lebapp.activity.TestActivity;
 import com.jeremyliao.lebapp.bean.TestBean1;
 import com.jeremyliao.lebapp.bean.TestBean2;
 import com.jeremyliao.lebapp.bean.TestBean3;
-import com.jeremyliao.liveeventbus.LiveEventBus;
+import com.jeremyliao.liveeventbus.XLiveDataEventBus;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -40,7 +40,7 @@ public class IpcPostTest {
 
     @Test
     public void testPostIpcString() throws Exception {
-        LiveEventBus
+        XLiveDataEventBus
                 .get(IpcTestActivity.KEY_TEST_IPC_OBSERVE)
                 .postAcrossApp("a");
         Thread.sleep(500);
@@ -49,7 +49,7 @@ public class IpcPostTest {
 
     @Test
     public void testPostIpcInt() throws Exception {
-        LiveEventBus
+        XLiveDataEventBus
                 .get(IpcTestActivity.KEY_TEST_IPC_OBSERVE)
                 .postAcrossApp(10);
         Thread.sleep(500);
@@ -58,7 +58,7 @@ public class IpcPostTest {
 
     @Test
     public void testPostIpcLong() throws Exception {
-        LiveEventBus
+        XLiveDataEventBus
                 .get(IpcTestActivity.KEY_TEST_IPC_OBSERVE)
                 .postAcrossApp(10l);
         Thread.sleep(500);
@@ -67,7 +67,7 @@ public class IpcPostTest {
 
     @Test
     public void testPostIpcBool() throws Exception {
-        LiveEventBus
+        XLiveDataEventBus
                 .get(IpcTestActivity.KEY_TEST_IPC_OBSERVE)
                 .postAcrossApp(true);
         Thread.sleep(500);
@@ -76,7 +76,7 @@ public class IpcPostTest {
 
     @Test
     public void testPostIpcFloat() throws Exception {
-        LiveEventBus
+        XLiveDataEventBus
                 .get(IpcTestActivity.KEY_TEST_IPC_OBSERVE)
                 .postAcrossApp(10.0f);
         Thread.sleep(500);
@@ -85,7 +85,7 @@ public class IpcPostTest {
 
     @Test
     public void testPostIpcDouble() throws Exception {
-        LiveEventBus
+        XLiveDataEventBus
                 .get(IpcTestActivity.KEY_TEST_IPC_OBSERVE)
                 .postAcrossApp(10d);
         Thread.sleep(500);
@@ -96,7 +96,7 @@ public class IpcPostTest {
     public void testPostIpcSerializable() throws Exception {
         TestBean1 bean = new TestBean1();
         bean.content = "hello world";
-        LiveEventBus
+        XLiveDataEventBus
                 .get(IpcTestActivity.KEY_TEST_IPC_OBSERVE)
                 .postAcrossApp(bean);
         Thread.sleep(500);
@@ -107,7 +107,7 @@ public class IpcPostTest {
     public void testPostIpcParcelable() throws Exception {
         TestBean2 bean = new TestBean2();
         bean.content = "hello world";
-        LiveEventBus
+        XLiveDataEventBus
                 .get(IpcTestActivity.KEY_TEST_IPC_OBSERVE)
                 .postAcrossApp(bean);
         Thread.sleep(500);
@@ -118,7 +118,7 @@ public class IpcPostTest {
     public void testPostIpcBean() throws Exception {
         TestBean3 bean = new TestBean3();
         bean.content = "hello world";
-        LiveEventBus
+        XLiveDataEventBus
                 .get(IpcTestActivity.KEY_TEST_IPC_OBSERVE)
                 .postAcrossApp(bean);
         Thread.sleep(500);
